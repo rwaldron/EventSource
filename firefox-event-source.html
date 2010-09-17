@@ -1,0 +1,23 @@
+<script src="firefox-event-source.js"></script>
+<script>
+console.log(EventSource);
+
+
+var eventSource = new EventSource('event.php');
+
+console.group('eventSource')
+  console.log(eventSource);
+  console.log(eventSource.constructor);
+console.groupEnd();
+
+eventSource.addEventListener('open', function (event) {
+  console.log('OPEN!');
+}, false);
+
+eventSource.addEventListener('message', function (event) {
+  var message = JSON.parse(event.data);
+    console.log(message);
+}, false);
+
+
+</script>
