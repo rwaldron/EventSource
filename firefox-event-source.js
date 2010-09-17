@@ -37,16 +37,38 @@
           boundary    = "\n", queue   = [],   origin  = '',
           lastEventId = null, xhr     = null, source  = null, matches   = null, resourceLocation  = null;
       
-      this.toString           = function () { return '[object EventSource]' };
       
-      //  EventSource listener
-      this.addEventListener   = function (type, listener, useCapture) {
+      this.toString             = function () { return '[object EventSource]' };
+      
+      this.addEventListener     = function (type, listener, useCapture) {
         document.addEventListener(type, listener, useCapture);
       };
-      //  EventSource dispatcher
-      this.dispatchEvent      = function (event) {
+      
+      this.removeEventListener  = function (type, listener, useCapture) {
+        document.removeEventListener(type, listener, useCapture);
+      };
+      
+      this.dispatchEvent        = function (event) {
         document.dispatchEvent(event);
       };
+      
+      this.URL  = resourceLocation.source;
+      
+      //  TODO, finish implementing this interface
+      this.onerror    = null;
+      
+      this.onmessage  = null;
+      
+      this.onopen     = null;
+      
+      this.readyState = null;
+      
+      this.CLOSED     = null;
+      
+      this.CONNECTING = null;
+      
+      this.OPEN       = null;
+      
        
       resourceLocation  = parseUri(resource);
       
@@ -56,7 +78,7 @@
           throw DOMException;//"SECURITY_ERR: DOM Exception";
         }
       }
-      this.URL  = resourceLocation.source;
+      
       
       var openConnectionXHR     = function() {
         
