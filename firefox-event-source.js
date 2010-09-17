@@ -5,18 +5,18 @@
     // MIT License    
     var parseUri = function(str) {
       var o   = {
-          key: ['source','protocol','authority','userInfo','user','password','host','port','relative','path','directory','file','query','anchor'],
-          q:   {
-            name:   'queryKey',
-            parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+            key: ['source','protocol','authority','userInfo','user','password','host','port','relative','path','directory','file','query','anchor'],
+            q:   {
+              name:   'queryKey',
+              parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+            },
+            parser: {
+              strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/
+            }
           },
-          parser: {
-            strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/
-          }
-        },
-        m   = o.parser.strict.exec(str),
-        uri = {},
-        i   = 14;
+          m   = o.parser.strict.exec(str),
+          uri = {},
+          i   = 14;
       
       while (i--) uri[o.key[i]] = m[i] || '';
       
@@ -30,21 +30,21 @@
         
     
     //   EventSource implementation
-    function EventSource( resource ) {
+    var EventSource = function( resource ) {
       
-      var that        = (this === window) ? {} : this,
+      var that        = this, 
           retry       = 1000, offset  = 0,
           boundary    = "\n", queue   = [],   origin  = '',
           lastEventId = null, xhr     = null, source  = null, matches   = null, resourceLocation  = null;
       
-      that.toString           = function () { return '[object EventSource]' };
+      this.toString           = function () { return '[object EventSource]' };
       
       //  EventSource listener
-      that.addEventListener   = function (type, listener, useCapture) {
+      this.addEventListener   = function (type, listener, useCapture) {
         document.addEventListener(type, listener, useCapture);
       };
       //  EventSource dispatcher
-      that.dispatchEvent      = function (event) {
+      this.dispatchEvent      = function (event) {
         document.dispatchEvent(event);
       };
        
@@ -56,10 +56,12 @@
           throw DOMException;//"SECURITY_ERR: DOM Exception";
         }
       }
-      that.URL  = resourceLocation.source;
+      this.URL  = resourceLocation.source;
       
       var openConnectionXHR     = function() {
-          
+        
+        
+        //  NEED TO ADD SUPPORT FOR IE
         xhr = new XMLHttpRequest();
         xhr.open('GET', that.URL, true);
 
