@@ -26,7 +26,8 @@
       });
       
       return uri;
-    };      
+    }, 
+    xhr;      
         
     
     //   EventSource implementation
@@ -84,7 +85,7 @@
         
         
         //  NEED TO ADD SUPPORT FOR IE
-        xhr = new XMLHttpRequest();
+        xhr = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
         xhr.open('GET', that.URL, true);
 
         //  FIRE OPEN EVENT
